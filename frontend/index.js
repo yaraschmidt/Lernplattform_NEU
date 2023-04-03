@@ -170,5 +170,37 @@ async function func(){
 
         break;
 
+        case "learn":
+            if(pageSplit[1]){
+                let user;
+                await fetch(backendAPI + "/user/" + pageSplit[1])
+                    .then(resp => resp.json())
+                    .then(u => {user = u});
+                    
+                if(user){
+                    let card;
+                    await fetch(user.links.nextCard.url)
+                        .then(resp => resp.json())
+                        .then(c => {card = c});
+                    if(card._id){
+                        await fetch("./templates/learn.html")
+                            .then(resp => resp.text())
+                            .then(text => {HTML_TEMPLATE = text});
+                        
+                        HTML_TEMPLATE = HTML_TEMPLATE.replace(/%QUESTION%/g, card.question);
+                        HTML_TEMPLATE = HTML_TEMPLATE.replace(/%ANSWER%/g, card.answer);
+                        HTML_TEMPLATE = HTML_TEMPLATE.replace(/%COLOR%/g, card.color);
+                        HTML_TEMPLATE = HTML_TEMPLATE.replace(/%CARDID%/g, card._id);
+                        HTML_TEMPLATE = HTML_TEMPLATE.replace(/%USERID%/g, user._id);
+    
+                        contentDiv.innerHTML = HTML_TEMPLATE;
+                        break;
+                    }
+                }
+            }
+
+        default:
+        break;
+
     }
 };
