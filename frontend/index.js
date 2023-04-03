@@ -120,6 +120,55 @@ async function func(){
             contentDiv.appendChild(createCardButton);
 
         break;
+
+        case "card":
+            await fetch("./templates/card.html")
+            .then(resp => resp.text())
+            .then(text => {HTML_TEMPLATE = text});
+        
+            const cardForm = document.createElement("form");
             
+            var html     = HTML_TEMPLATE;
+            var isUpdate = pageSplit.length > 1;
+            var card = {
+                "question" : "",
+                "answer" : "",
+                "color" : "#ffffff"
+            }
+            if(isUpdate){
+                await fetch(backendAPI + "/cards/" + pageSplit[1])
+                .then(resp => (resp.ok) ? resp.json() : card )
+                .then(c => {card = c});
+            }
+            
+            html = html.replace(/%QUESTION%/g, card.question);
+            html = html.replace(/%ANSWER%/g, card.answer);
+            html = html.replace(/%COLOR%/g, card.color);
+            html = html.replace(/%CARD_ACTION%/g, (isUpdate) ? 'Update Card' : 'Create Card');
+            
+            cardForm.innerHTML = html;
+            cardForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const body = {
+                    _id : pageSplit[1],
+                    question : e.target.question.value,
+                    answer : e.target.answer.value,
+                    color : e.target.color.value
+                };
+                console.log(body);
+                await fetch(backendAPI + "/cards/", {
+                    method : (isUpdate) ? 'PUT' : 'POST',
+                    headers : {
+                        'Content-Type': 'application/json'
+                    },
+                    body : JSON.stringify(body)
+                })
+                
+                route('cards');
+            });
+            contentDiv.appendChild(cardForm);
+
+        break;
+
     }
 };
