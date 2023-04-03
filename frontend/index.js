@@ -40,5 +40,57 @@ async function func(){
             contentDiv.appendChild(createUserButton);
 
         break;
+
+        case "user":
+            await fetch("./templates/user.html")
+                .then(resp => resp.text())
+                .then(text => {HTML_TEMPLATE = text});
+            
+            const userForm = document.createElement("form");
+            
+            var html     = HTML_TEMPLATE;
+            var isUpdate = pageSplit.length > 1;
+            var user = {
+                "name" : "",
+                "age" : 0,
+                "color" : "#ffffff"
+            }
+            if(isUpdate){
+                await fetch(backendAPI + "/user/" + pageSplit[1])
+                .then(resp => (resp.ok) ? resp.json() : user )
+                .then(u => {user = u});
+            }
+            
+            html = html.replace(/%NAME%/g, user.name);
+            html = html.replace(/%AGE%/g, user.age);
+            html = html.replace(/%COLOR%/g, user.color);
+            html = html.replace(/%USER_ACTION%/g, (isUpdate) ? 'Update User' : 'Create User');
+            
+            userForm.innerHTML = html;
+            userForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const body = {
+                    _id : pageSplit[1],
+                    name : e.target.name.value,
+                    age : e.target.age.value,
+                    color : e.target.color.value
+                };
+                await fetch(backendAPI + "/user/", {
+                    method : (isUpdate) ? 'PUT' : 'POST',
+                    headers : {
+                        'Content-Type': 'application/json'
+                    },
+                    body : JSON.stringify(body)
+                })
+                
+                route('users');
+            });
+            contentDiv.appendChild(userForm);
+            document.getElementById("deleteUser").addEventListener('click', () => {
+                deleteUser(user._id);
+            })
+
+        break;
+            
     }
 };
