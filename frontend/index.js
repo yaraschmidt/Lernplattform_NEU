@@ -2,6 +2,47 @@ let HTML_TEMPLATE = "";
 
 const backendAPI = "http://localhost:3000";
 
+function solveCard(cardId, userId, kind){
+    const body = {
+        "userId" : userId,
+        "cardId" : cardId,
+        "answerKind" : kind };
+
+    fetch(backendAPI + "/cards/solve",{
+        method: "POST",
+        headers : {
+            'Content-Type': 'application/json'
+        },
+        body : JSON.stringify(body)
+    })
+    .then(() => route("learn/" + userId));
+}
+
+function deleteCard(cardId){
+    fetch(backendAPI + "/cards/" + cardId,{
+        method: "DELETE"
+    })
+    .then(() => route('cards'));
+}
+
+function deleteUser(userId){
+    fetch(backendAPI + "/user/" + userId,{
+        method : "DELETE"
+    })
+    .then(() => route('users'));
+}
+
+function route (target) {
+    if(window.location.hash === "#" + target) return window.location.reload();
+    window.location.href = "./#" + target;
+    window.location.reload(true);
+}
+
+function showBack(){
+    const backSide = document.getElementsByClassName("back")[0];
+    backSide.style.display = "flex";
+}
+
 window.addEventListener("hashchange", func);
 window.addEventListener("load", func);
 
