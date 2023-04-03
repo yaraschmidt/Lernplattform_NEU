@@ -91,6 +91,35 @@ async function func(){
             })
 
         break;
+
+        case "cards":
+            await fetch("./templates/cards.html")
+                .then(resp => resp.text())
+                .then(text => {HTML_TEMPLATE = text});
+
+
+            const cardListDiv = document.createElement("div");
+            cardListDiv.classList.add("list")
+
+            fetch(backendAPI + "/cards")
+                .then(cards => cards.json())
+                .then(arr => arr.forEach(card => {
+                    let html = HTML_TEMPLATE;
+
+                    html = html.replace(/%QUESTION%/g, card["question"]);
+                    html = html.replace(/%ANSWER%/g, card["answer"]);
+                    html = html.replace(/%COLOR%/g, card["color"]);
+                    html = html.replace(/%CARDID%/g, card["_id"]);
+                    cardListDiv.innerHTML += html;
+                }));
+
+            const createCardButton = document.createElement("button");
+            createCardButton.innerHTML = "Create Card";
+            createCardButton.onclick = () => route('card');
+            contentDiv.appendChild(cardListDiv);
+            contentDiv.appendChild(createCardButton);
+
+        break;
             
     }
 };
