@@ -35,7 +35,7 @@ function deleteUser(userId){
 function route (target) {
     if(window.location.hash === "#" + target) return window.location.reload();
     window.location.href = "./#" + target;
-    window.location.reload(true);
+    // window.location.reload(true);
 }
 
 function showBack(){
