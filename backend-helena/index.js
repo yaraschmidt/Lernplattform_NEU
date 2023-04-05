@@ -16,3 +16,7 @@ const baseUrl = "http://localhost:3000";
 
 app.use(express.json());
 app.use(cors());
+
+app.listen(3000, "0.0.0.0", function() {
+    console.log("Server gestartet!");
+});
