@@ -67,6 +67,88 @@ app.delete("/user/:id", async function(req, res) {
     }
 });
 
+app.get("/cards", async function(_, res) {
+    const arr = await cardDocuments.find({}).toArray();
+    res.json(arr.map(processUser));
+});
+
+app.get("/cards/:id", async function(req, res) {
+    const {id, } = req.params;
+    if(id == undefined) return res.sendStatus(400);
+    const card = await cardDocuments.findOne({_id : new ObjectId(id)});
+    res.json(processCard(card));
+})
+
+app.post("/cards", async function(req, res) {
+    const {question, answer, color} = req.body;
+    if( question == undefined || answer == undefined || color == undefined) return res.sendStatus(404);
+    const card = {
+        question : question,
+        answer : answer,
+        color : color,
+        user : []
+    }
+    const response = await cardDocuments.insertOne(card);
+    card._id = response.insertedId;
+    res.json(processCard(card));
+});
+
+app.post("/cards/solve", async function(req, res) {
+    const {cardId, userId, answerKind} = req.body;
+    if(cardId == undefined || userId == undefined) return res.sendStatus(400);
+    const user = await userDocuments.findOne({_id : new ObjectId(userId)});
+    if(!user) return res.sendStatus(403);
+    await cardDocuments.updateOne({_id : new ObjectId(cardId)}, {$push : {"user" : { userId : user._id, kind : answerKind }}})
+    res.sendStatus(200);
+});
+
+app.get("/cards/nextForUser/:id", async function(req, res) {
+    const { id } = req.params;
+    if(id == undefined ) return res.sendStatus(400);
+    const oid = new ObjectId(id);
+    const card = await cardDocuments.findOne({
+        $or : [
+            { user : { $eq : [] } },
+            { user : 
+                { $not : {
+                    "$elemMatch" : {
+                        userId : oid ,
+                        kind : 'solved'
+                    }
+            } } }
+        ]
+    });
+    res.json(processCard(card));
+});
+
+app.put("/cards", async function(req, res) {
+    const { _id, question, answer, color } = req.body;
+    if(_id == undefined || question == undefined || answer == undefined || color == undefined ) return res.sendStatus(400);
+    const card = {
+        _id : new ObjectId(_id),
+        question : question,
+        answer : answer,
+        color : color
+    }
+    const response = await cardDocuments.updateOne({_id : card._id}, {$set : card});
+    if(response.acknowledged && response.modifiedCount == 1){
+        res.json(processCard(card))
+    }else{
+        res.json()
+    }
+});
+
+app.delete("/cards/:id", async function(req, res) {
+    const { id } = req.params;
+    if(id == undefined) return res.sendStatus(400);
+    const response = await cardDocuments.deleteOne({_id : new ObjectId(id)});
+    if(response.acknowledged && response.deletedCount == 1){
+        res.sendStatus(200);
+    }else{
+        res.sendStatus(403);
+    }
+});
+
 app.listen(3000, "0.0.0.0", function() {
     console.log("Server gestartet!");
 });
