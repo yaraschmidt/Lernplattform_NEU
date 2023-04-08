@@ -17,6 +17,19 @@ const baseUrl = "http://localhost:3000";
 app.use(express.json());
 app.use(cors());
 
+function processUser(user){
+    if(!user) return user;
+    user.links = {
+        create   : { url : baseUrl, method : "POST" },
+        getAll   : { url : baseUrl, method : "GET" },
+        get      : { url : baseUrl + "/" + user._id,                              method : "GET" },
+        update   : { url : baseUrl + "/" + user._id,                              method : "PUT" },
+        delete   : { url : baseUrl + "/" + user._id,                              method : "DELETE" },
+        nextCard : { url : "http://localhost:3000/cards/nextForUser/" + user._id, method : "GET" },
+    }
+    return user;
+}
+
 app.get("/user", async function(_, res){
     const arr = await userDocuments.find({}).toArray()
     res.json(arr.map(processUser))
