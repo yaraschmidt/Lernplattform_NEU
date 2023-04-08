@@ -30,6 +30,24 @@ function processUser(user){
     return user;
 }
 
+function processCard(card){
+    if(!card)
+        return { links :{
+                create : { url : baseUrl, method : "POST" },
+                getAll : { url : baseUrl, method : "GET" }
+            }
+        }
+    card.links = {
+        create : { url : baseUrl,                   method : "POST" },
+        getAll : { url : baseUrl,                   method : "GET" },
+        solve  : { url : baseUrl + "/solve",        method : "POST" },
+        get    : { url : baseUrl + "/" + card._id,  method : "GET" },
+        update : { url : baseUrl + "/" + card._id,  method : "PUT" },
+        delete : { url : baseUrl + "/" + card._id,  method : "DELETE" },
+    }
+    return card
+}
+
 app.get("/user", async function(_, res){
     const arr = await userDocuments.find({}).toArray()
     res.json(arr.map(processUser))
