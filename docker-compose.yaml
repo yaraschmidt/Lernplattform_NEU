@@ -27,7 +27,7 @@ services:
     restart: always
     environment:
       MONGODB_CONNECTION_URL: mongodb://root:root@mongodb:27017/
-      MONGODB_DATABASE:   
+      MONGODB_DATABASE: application
       MONGODB_COLLECTION_CARD: cards
       MONGODB_COLLECTION_USER: user
       MONGODB_COLLECTION_USER_CARDS: user_cards

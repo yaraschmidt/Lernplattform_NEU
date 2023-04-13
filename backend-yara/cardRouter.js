@@ -2,7 +2,7 @@ import express from "express";
 import { ObjectId } from "mongodb";
 import { collections } from "./backend.js";
 
-const baseUrl = "http://localhost:3000/cards"
+const baseUrl = "https://3000-yaraschmidt-lernplattfo-mt4bz23admg.ws-eu93.gitpod.io"
 
 function insertHateoasLinks(card){
     if(!card)
@@ -12,12 +12,12 @@ function insertHateoasLinks(card){
             }
         }
     card.links = {
-        create : { url : baseUrl,                   method : "POST" },
-        getAll : { url : baseUrl,                   method : "GET" },
-        solve  : { url : baseUrl + "/solve",        method : "POST" },
-        get    : { url : baseUrl + "/" + card._id,  method : "GET" },
-        update : { url : baseUrl + "/" + card._id,  method : "PUT" },
-        delete : { url : baseUrl + "/" + card._id,  method : "DELETE" },
+        create : { url : baseUrl + "/cards",        method : "POST" },
+        getAll : { url : baseUrl + "/cards",        method : "GET" },
+        solve  : { url : baseUrl + "cards/solve",   method : "POST" },
+        get    : { url : baseUrl + "/cards/" + card._id,  method : "GET" },
+        update : { url : baseUrl + "/cards/" + card._id,  method : "PUT" },
+        delete : { url : baseUrl + "/cards/" + card._id,  method : "DELETE" },
     }
     return card
 }
@@ -60,7 +60,7 @@ cardRouter.get("/nextForUser/:id", (req, res) => {
             { user : 
                 { $not : {
                     "$elemMatch" : {
-                        userId : oid ,
+                        userId : new ObjectId(id),
                         kind : 'solved'
                     }
             } } }

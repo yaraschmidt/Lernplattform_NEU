@@ -12,20 +12,20 @@ const userDocuments = db.collection( process.env.MONGODB_COLLECTION_USER );
 const cardDocuments = db.collection( process.env.MONGODB_COLLECTION_USER_CARDS );
 
 const app = express();
-const baseUrl = "http://localhost:3000";
+const baseUrl = "https://3000-yaraschmidt-lernplattfo-mt4bz23admg.ws-eu93.gitpod.io";
 
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
 function processUser(user){
     if(!user) return user;
     user.links = {
-        create   : { url : baseUrl, method : "POST" },
-        getAll   : { url : baseUrl, method : "GET" },
-        get      : { url : baseUrl + "/" + user._id,                              method : "GET" },
-        update   : { url : baseUrl + "/" + user._id,                              method : "PUT" },
-        delete   : { url : baseUrl + "/" + user._id,                              method : "DELETE" },
-        nextCard : { url : "http://localhost:3000/cards/nextForUser/" + user._id, method : "GET" },
+        create   : { url : baseUrl + "/user", method : "POST" },
+        getAll   : { url : baseUrl + "/user", method : "GET" },
+        get      : { url : baseUrl + "/user/" + user._id,                         method : "GET" },
+        update   : { url : baseUrl + "/user/" + user._id,                         method : "PUT" },
+        delete   : { url : baseUrl + "/user/" + user._id,                         method : "DELETE" },
+        nextCard : { url : baseUrl + "/cards/nextForUser/" + user._id,            method : "GET" },
     }
     return user;
 }
@@ -33,17 +33,17 @@ function processUser(user){
 function processCard(card){
     if(!card)
         return { links :{
-                create : { url : baseUrl, method : "POST" },
-                getAll : { url : baseUrl, method : "GET" }
+                create : { url : baseUrl + "/cards", method : "POST" },
+                getAll : { url : baseUrl + "/cards", method : "GET" }
             }
         }
     card.links = {
-        create : { url : baseUrl,                   method : "POST" },
-        getAll : { url : baseUrl,                   method : "GET" },
-        solve  : { url : baseUrl + "/solve",        method : "POST" },
-        get    : { url : baseUrl + "/" + card._id,  method : "GET" },
-        update : { url : baseUrl + "/" + card._id,  method : "PUT" },
-        delete : { url : baseUrl + "/" + card._id,  method : "DELETE" },
+        create : { url : baseUrl + "/cards",                   method : "POST" },
+        getAll : { url : baseUrl + "/cards",                   method : "GET" },
+        solve  : { url : baseUrl + "/cards/solve",        method : "POST" },
+        get    : { url : baseUrl + "/cards/" + card._id,  method : "GET" },
+        update : { url : baseUrl + "/cards/" + card._id,  method : "PUT" },
+        delete : { url : baseUrl + "/cards/" + card._id,  method : "DELETE" },
     }
     return card
 }

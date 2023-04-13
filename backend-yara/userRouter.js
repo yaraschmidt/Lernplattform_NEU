@@ -2,17 +2,17 @@ import express from "express";
 import { ObjectId } from "mongodb";
 import { collections } from "./backend.js";
 
-const baseUrl = "http://localhost:3000/user";
+const baseUrl = "https://3000-yaraschmidt-lernplattfo-mt4bz23admg.ws-eu93.gitpod.io";
 
 function insertHateoasLinks(user){
     if(!user) return user;
     user.links = {
-        create   : { url : baseUrl, method : "POST" },
-        getAll   : { url : baseUrl, method : "GET" },
-        get      : { url : baseUrl + "/" + user._id,                              method : "GET" },
-        update   : { url : baseUrl + "/" + user._id,                              method : "PUT" },
-        delete   : { url : baseUrl + "/" + user._id,                              method : "DELETE" },
-        nextCard : { url : "http://localhost:3000/cards/nextForUser/" + user._id, method : "GET" },
+        create   : { url : baseUrl + "/user", method : "POST" },
+        getAll   : { url : baseUrl + "/user", method : "GET" },
+        get      : { url : baseUrl + "/user/" + user._id,                              method : "GET" },
+        update   : { url : baseUrl + "/user/" + user._id,                              method : "PUT" },
+        delete   : { url : baseUrl + "/user/" + user._id,                              method : "DELETE" },
+        nextCard : { url : baseUrl + "/cards/nextForUser/" + user._id, method : "GET" },
     }
     return user;
 }
@@ -33,7 +33,8 @@ userRouter.get("/:id", async (req, res) => {
 
 userRouter.post("/", async (req, res) => {
     const {name, age, color} = req.body;
-    if(!name || !age || !color) return res.sendStatus(404);
+    console.log(name, age, color);
+    if(!name || !age || !color) return res.sendStatus(400);
     collections.userCollection.insertOne({
             name: name,
             age: age,

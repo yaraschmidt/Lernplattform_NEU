@@ -20,6 +20,7 @@ function solveCard(cardId, userId, kind){
 
 function deleteCard(cardId){
     fetch(backendAPI + "/cards/" + cardId,{
+        
         method: "DELETE"
     })
     .then(() => route('cards'));
@@ -27,6 +28,7 @@ function deleteCard(cardId){
 
 function deleteUser(userId){
     fetch(backendAPI + "/user/" + userId,{
+        
         method : "DELETE"
     })
     .then(() => route('users'));
@@ -118,6 +120,7 @@ async function func(){
                 };
                 await fetch(backendAPI + "/user/", {
                     method : (isUpdate) ? 'PUT' : 'POST',
+                    
                     headers : {
                         'Content-Type': 'application/json'
                     },
@@ -199,6 +202,7 @@ async function func(){
                 console.log(body);
                 await fetch(backendAPI + "/cards/", {
                     method : (isUpdate) ? 'PUT' : 'POST',
+                    
                     headers : {
                         'Content-Type': 'application/json'
                     },
@@ -214,13 +218,13 @@ async function func(){
         case "learn":
             if(pageSplit[1]){
                 let user;
-                await fetch(backendAPI + "/user/" + pageSplit[1])
+                await fetch(backendAPI + "/user/" + pageSplit[1],)
                     .then(resp => resp.json())
                     .then(u => {user = u});
                     
                 if(user){
                     let card;
-                    await fetch(user.links.nextCard.url)
+                    await fetch(user.links.nextCard.url, )
                         .then(resp => resp.json())
                         .then(c => {card = c});
                     if(card._id){
