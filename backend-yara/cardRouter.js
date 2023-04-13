@@ -7,14 +7,14 @@ const baseUrl = "https://3000-yaraschmidt-lernplattfo-mt4bz23admg.ws-eu93.gitpod
 function insertHateoasLinks(card){
     if(!card)
         return { links :{
-                create : { url : baseUrl, method : "POST" },
-                getAll : { url : baseUrl, method : "GET" }
+                create : { url : baseUrl + "/cards", method : "POST" },
+                getAll : { url : baseUrl + "/cards", method : "GET" }
             }
         }
     card.links = {
         create : { url : baseUrl + "/cards",        method : "POST" },
         getAll : { url : baseUrl + "/cards",        method : "GET" },
-        solve  : { url : baseUrl + "cards/solve",   method : "POST" },
+        solve  : { url : baseUrl + "/cards/solve",   method : "POST" },
         get    : { url : baseUrl + "/cards/" + card._id,  method : "GET" },
         update : { url : baseUrl + "/cards/" + card._id,  method : "PUT" },
         delete : { url : baseUrl + "/cards/" + card._id,  method : "DELETE" },
