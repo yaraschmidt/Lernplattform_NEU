@@ -1,6 +1,6 @@
 let HTML_TEMPLATE = "";
 
-const backendAPI = "http://localhost:3000";
+const backendAPI = "https://3000-yaraschmidt-lernplattfo-mt4bz23admg.ws-eu93.gitpod.io";
 
 function solveCard(cardId, userId, kind){
     const body = {
@@ -241,7 +241,10 @@ async function func(){
             }
 
         default:
-        break;
+            HTML_TEMPLATE = await fetch("./templates/home.html")
+                .then(resp => resp.text());
+
+            contentDiv.innerHTML = HTML_TEMPLATE;
 
     }
 };
