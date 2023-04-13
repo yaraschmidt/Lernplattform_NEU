@@ -142,19 +142,19 @@ server.post("/cards/solve", async (req, res) => {
 server.get("/cards/nextForUser/:id", async (req, res) => {
     const { id } = req.params;
     if(id == undefined ) return res.sendStatus(400);
-    cardCollection.findOne({
+    cardCollection.find({
         $or : [
             { user : { $eq : [] } },
             { user : 
                 { $not : {
                     "$elemMatch" : {
-                        userId : oid ,
+                        userId : new ObjectId(id),
                         kind : 'solved'
                     }
             } } }
         ]
-    })
-        .then(val => console.log(val))
+    }).toArray()
+        .then(arr => arr[Math.floor(Math.random()*arr.length)])
         .then(processCard)
         .then(card => res.json(card));
 });

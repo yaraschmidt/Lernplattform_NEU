@@ -54,7 +54,7 @@ cardRouter.post("/solve", async (req, res) => {
 cardRouter.get("/nextForUser/:id", (req, res) => {
     const { id } = req.params;
     if(!id) return res.sendStatus(400);
-    collections.cardCollection.findOne({
+    collections.cardCollection.find({
         $or : [
             { user : { $eq : [] } },
             { user : 
@@ -65,7 +65,10 @@ cardRouter.get("/nextForUser/:id", (req, res) => {
                     }
             } } }
         ]
-    }).then(val => res.json(insertHateoasLinks(val)));
+    })
+    .toArray()
+    .then(arr => arr[Math.floor(Math.random()*arr.length)])
+    .then(val => res.json(insertHateoasLinks(val)));
 });
 
 cardRouter.post("/", async (req, res) => {

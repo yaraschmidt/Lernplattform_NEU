@@ -137,7 +137,7 @@ app.get("/cards/nextForUser/:id", async function(req, res) {
     const { id } = req.params;
     if(id == undefined ) return res.sendStatus(400);
     const oid = new ObjectId(id);
-    const card = await cardDocuments.findOne({
+    const card = await cardDocuments.find({
         $or : [
             { user : { $eq : [] } },
             { user : 
@@ -148,8 +148,9 @@ app.get("/cards/nextForUser/:id", async function(req, res) {
                     }
             } } }
         ]
-    });
-    res.json(processCard(card));
+    }).toArray();
+    var item = card[Math.floor(Math.random()*card.length)];
+    res.json(processCard(item));
 });
 
 app.put("/cards", async function(req, res) {
