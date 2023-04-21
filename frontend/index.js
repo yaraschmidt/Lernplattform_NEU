@@ -1,6 +1,7 @@
 let HTML_TEMPLATE = "";
 
-const backendAPI = "https://3000-yaraschmidt-lernplattfo-mt4bz23admg.ws-eu93.gitpod.io";
+//const backendAPI = "http://backend:3000";
+const backendAPI = "https://80-yaraschmidt-lernplattfo-mt4bz23admg.ws-eu95.gitpod.io/api";
 
 function solveCard(cardId, userId, kind){
     const body = {
@@ -99,7 +100,7 @@ async function func(){
                 "color" : "#ffffff"
             }
             if(isUpdate){
-                await fetch(backendAPI + "/user/" + pageSplit[1])
+                await fetch(backendAPI + "/user" + pageSplit[1])
                 .then(resp => (resp.ok) ? resp.json() : user )
                 .then(u => {user = u});
             }
@@ -118,7 +119,7 @@ async function func(){
                     age : e.target.age.value,
                     color : e.target.color.value
                 };
-                await fetch(backendAPI + "/user/", {
+                await fetch(backendAPI + "/user", {
                     method : (isUpdate) ? 'PUT' : 'POST',
                     
                     headers : {
@@ -130,9 +131,9 @@ async function func(){
                 route('users');
             });
             contentDiv.appendChild(userForm);
-            document.getElementById("deleteUser").addEventListener('click', () => {
-                deleteUser(user._id);
-            })
+            //document.getElementById("deleteUser").addEventListener('click', () => {
+            //   deleteUser(user._id);
+            //})
 
         break;
 

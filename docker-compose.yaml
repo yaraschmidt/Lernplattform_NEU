@@ -31,9 +31,9 @@ services:
       MONGODB_COLLECTION_CARD: cards
       MONGODB_COLLECTION_USER: user
       MONGODB_COLLECTION_USER_CARDS: user_cards
-    ports:
-      - 3000:3000
-      - 9229:9229
+    expose:
+      - 3000
+      - 9229
     volumes:
         - ./backend-yara:/app
         # - ./backend-doreen:/app
@@ -44,9 +44,10 @@ services:
   nginx:
     image: nginx
     ports:
-      - 8080:80
+      - 80:80
     volumes:
       - ./frontend:/usr/share/nginx/html
+      - ./default.conf:/etc/nginx/conf.d/default.conf
 
 volumes:
   dbdata:
