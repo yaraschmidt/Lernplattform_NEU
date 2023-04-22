@@ -31,6 +31,7 @@ services:
       MONGODB_COLLECTION_CARD: cards
       MONGODB_COLLECTION_USER: user
       MONGODB_COLLECTION_USER_CARDS: user_cards
+      URL: https://80-yaraschmidt-lernplattfo-mt4bz23admg.ws-eu95.gitpod.io/api
     expose:
       - 3000
       - 9229

@@ -1,8 +1,11 @@
 import express from "express";
 import { ObjectId } from "mongodb";
 import { collections } from "./backend.js";
+import dotenv from 'dotenv';
 
-const baseUrl = "https://3000-yaraschmidt-lernplattfo-mt4bz23admg.ws-eu93.gitpod.io";
+dotenv.config();
+
+const baseUrl = process.env.URL;
 
 function insertHateoasLinks(user){
     if(!user) return user;

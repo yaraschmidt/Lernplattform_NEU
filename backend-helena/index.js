@@ -12,7 +12,7 @@ const userDocuments = db.collection( process.env.MONGODB_COLLECTION_USER );
 const cardDocuments = db.collection( process.env.MONGODB_COLLECTION_USER_CARDS );
 
 const app = express();
-const baseUrl = "https://3000-yaraschmidt-lernplattfo-mt4bz23admg.ws-eu93.gitpod.io";
+const baseUrl = process.env.URL;
 
 app.use(cors());
 app.use(express.json());

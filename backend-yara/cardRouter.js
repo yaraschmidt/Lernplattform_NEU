@@ -1,8 +1,11 @@
 import express from "express";
 import { ObjectId } from "mongodb";
 import { collections } from "./backend.js";
+import dotenv from 'dotenv';
 
-const baseUrl = "https://3000-yaraschmidt-lernplattfo-mt4bz23admg.ws-eu93.gitpod.io"
+dotenv.config();
+
+const baseUrl = process.env.URL;
 
 function insertHateoasLinks(card){
     if(!card)
@@ -41,12 +44,12 @@ cardRouter.get("/:id", async (req, res) => {
 });
 
 cardRouter.post("/solve", async (req, res) => {
-    const { cardId, userId, kind } = req.body;
+    const { cardId, userId, answerKind } = req.body;
     if(!cardId || !userId) return res.sendStatus(400);
     collections.userCollection.findOne({_id : new ObjectId(userId)})
         .then(val => {
             if(!val) return res.sendStatus(401);
-            collections.cardCollection.updateOne({_id : new ObjectId(cardId)}, {$push : {"user" : { userId : new ObjectId(userId), kind : kind }}})
+            collections.cardCollection.updateOne({_id : new ObjectId(cardId)}, {$push : {"user" : { userId : new ObjectId(userId), kind : answerKind }}})
                 .then(val => res.sendStatus( (val.acknowledged) ? 200 : 402 ));
         });
 });

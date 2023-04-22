@@ -2,10 +2,13 @@ import express from "express";
 import cors from "cors";
 import { connect } from "./db.js";
 import { ObjectId } from "mongodb";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const [userCollection, cardCollection] = await connect();
 const server = express();
-const baseUrl = "https://3000-yaraschmidt-lernplattfo-mt4bz23admg.ws-eu93.gitpod.io";
+const baseUrl = process.env.URL;
 
 server.use(express.json());
 server.use(cors());
